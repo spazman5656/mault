@@ -78,7 +78,8 @@ async function run(): Promise<boolean> {
   try {
     log("TCGplayer SKUs: starting.");
     const skus = await syncTcgplayerSkus({ force, gameKeys, log });
-    ok &&= skus.failedSets === 0;
+    // Upstream TCGTracking always 404s a few promo sets' SKUs. Logged below,
+    // but not a failed run: prices and products are what the sync is for.
     log(
       skus.skipped
         ? "TCGplayer SKUs: unchanged."
