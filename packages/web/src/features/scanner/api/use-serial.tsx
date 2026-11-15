@@ -696,9 +696,14 @@ export function SerialProvider({ children }: { children: React.ReactNode }) {
       } | null> => {
         const deadline = Date.now() + SERIAL_IDENTIFY_TIMEOUT_MS;
         let status: Record<string, unknown> | null = null;
+        // The boot banner (printed when the port opens and resets the board)
+        // has a version but no uptimeMs or wifi fields. Keep asking until a
+        // live getStatus reply arrives, and fall back to the banner only if
+        // none does (older firmware).
+        let isLive = false;
         for (
           let attempt = 0;
-          attempt < SERIAL_IDENTIFY_ATTEMPTS && !status;
+          attempt < SERIAL_IDENTIFY_ATTEMPTS && !isLive;
           attempt++
         ) {
           const remaining = deadline - Date.now();
@@ -710,7 +715,11 @@ export function SerialProvider({ children }: { children: React.ReactNode }) {
           if (!sent) break;
           try {
             const parsed = JSON.parse(line);
-            if (typeof parsed?.version === "string") status = parsed;
+            if (typeof parsed?.version === "string") {
+              const live = typeof parsed.uptimeMs === "number";
+              if (!status || live) status = parsed;
+              isLive = isLive || live;
+            }
           } catch {}
         }
         if (session.transport !== newTransport) return null;
