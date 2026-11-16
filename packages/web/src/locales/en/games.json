@@ -84,7 +84,8 @@
     "search": "Search",
     "loading": "Searching…",
     "loadError": "Couldn't find a sample card for that search.",
-    "sampleName": "Sample: {{name}}"
+    "sampleName": "Sample: {{name}}",
+    "addAll": "Add all fields from this card"
   },
   "fieldDefinitionsEditor": {
     "heading": "Fields",

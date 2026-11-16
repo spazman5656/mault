@@ -1,4 +1,5 @@
 import type { FieldType } from "@magic-vault/shared";
+import type { PickedField } from "@/lib/interfaces/games";
 
 
 export function humanizeKey(key: string): string {
@@ -32,6 +33,35 @@ export function isObjectArray(value: unknown): value is unknown[] {
     Array.isArray(value) &&
     value.some((v) => v !== null && typeof v === "object")
   );
+}
+
+const DISCOVER_MAX_DEPTH = 3;
+
+/** Flatten a sample card into one pickable field per scalar or string-list leaf. */
+export function discoverFields(
+  raw: Record<string, unknown>,
+  prefix = "",
+  depth = 1,
+): PickedField[] {
+  const out: PickedField[] = [];
+  for (const [key, value] of Object.entries(raw)) {
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (value === null || value === undefined) continue;
+    if (isPlainObject(value)) {
+      if (depth < DISCOVER_MAX_DEPTH) {
+        out.push(...discoverFields(value, path, depth + 1));
+      }
+      continue;
+    }
+    if (isObjectArray(value)) continue;
+    out.push({
+      field: pathToFieldKey(path),
+      label: humanizeKey(key),
+      type: inferFieldType(value),
+      path,
+    });
+  }
+  return out;
 }
 
 export function uniqueFieldKey(base: string, existing: string[]): string {

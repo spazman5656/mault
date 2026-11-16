@@ -78,6 +78,20 @@ export function GameFieldDefinitionsEditor() {
     );
   }
 
+  function handlePickAll(picked: PickedField[]) {
+    const existing = new Set((rows ?? []).map((f) => f.path));
+    const keys = (rows ?? []).map((f) => f.field);
+    for (const p of picked) {
+      if (existing.has(p.path)) continue;
+      const field = uniqueFieldKey(p.field, keys);
+      keys.push(field);
+      append(
+        { field, label: p.label, type: p.type, path: p.path, optionsText: "" },
+        { shouldFocus: false },
+      );
+    }
+  }
+
   function hasOptions(index: number) {
     const type = rows?.[index]?.type;
     return type === "enum" || type === "set";
@@ -123,7 +137,9 @@ export function GameFieldDefinitionsEditor() {
 
       {showSample && gameKey && (
         <div className="flex max-h-96 flex-col overflow-hidden rounded-lg border p-3">
-          <SampleCardBrowser gameKey={gameKey} onPick={handlePick} />
+          <SampleCardBrowser gameKey={gameKey} onPick={handlePick}
+            onPickAll={handlePickAll}
+          />
         </div>
       )}
 

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getSampleCard } from "@/features/games/api/games";
 import {
+  discoverFields,
   humanizeKey,
   inferFieldType,
   isObjectArray,
@@ -95,7 +96,11 @@ function JsonNode({ path, keyName, value, onPick }: JsonNodeProps) {
   );
 }
 
-export function SampleCardBrowser({ gameKey, onPick }: SampleCardBrowserProps) {
+export function SampleCardBrowser({
+  gameKey,
+  onPick,
+  onPickAll,
+}: SampleCardBrowserProps) {
   const { t } = useTranslation("games");
   const [query, setQuery] = useState("");
   const [sampleName, setSampleName] = useState<string | null>(null);
@@ -164,6 +169,16 @@ export function SampleCardBrowser({ gameKey, onPick }: SampleCardBrowserProps) {
             <p className="text-xs text-foreground/70">
               {t("fieldMapping.sampleName", { name: sampleName })}
             </p>
+          )}
+          {onPickAll && (
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-none self-start"
+              onClick={() => onPickAll(discoverFields(raw))}
+            >
+              {t("fieldMapping.addAll")}
+            </Button>
           )}
           <div className="flex-1 overflow-y-auto">
             <div className="flex flex-col">

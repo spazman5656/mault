@@ -36,4 +36,5 @@ export interface JsonNodeProps {
 export interface SampleCardBrowserProps {
   gameKey: string;
   onPick: (field: PickedField) => void;
+  onPickAll?: (fields: PickedField[]) => void;
 }
