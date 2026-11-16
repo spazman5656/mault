@@ -79,7 +79,12 @@ export async function signUpLocal(
       success: boolean;
       data?: LocalAuthResult;
       message?: string;
-    }>("/api/local-auth/sign-up", { email, password, name });
+    }>("/api/local-auth/sign-up", {
+      email,
+      password,
+      name,
+      inviteToken: localStorage.getItem(PENDING_INVITE_KEY) ?? undefined,
+    });
     if (!res.success || !res.data) {
       return { error: res.message ?? "Sign up failed." };
     }
