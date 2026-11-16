@@ -2,6 +2,7 @@ import {
   toPickList,
   type BinConfig,
   type BinRuleGroup,
+  type FieldMeta,
   type PickListInput,
 } from "@magic-vault/shared";
 import { and, eq } from "drizzle-orm";
@@ -25,6 +26,7 @@ import {
   normalizeOverflowBins,
   toBinPickList,
 } from "./shared";
+import { validateBinRules } from "./validate-rules";
 
 export const editBinRoute = new Hono<AppEnv>().put(
   "/bins/:binNumber",
@@ -61,6 +63,24 @@ export const editBinRoute = new Hono<AppEnv>().put(
     }>();
     const result = await authQuery(c.get("jwtClaims"), async (tx) => {
       const gameId = await resolveGameId(tx, gameGuid);
+      if (!pickList) {
+        const game = gameId
+          ? await tx.query.games.findFirst({
+              where: (t, { eq }) => eq(t.id, gameId),
+              columns: { fieldDefinitions: true },
+            })
+          : null;
+        const problems = validateBinRules(
+          rules,
+          game ? (game.fieldDefinitions as FieldMeta[]) : null,
+        );
+        if (problems.length > 0) {
+          return {
+            message: `Invalid rules. ${problems.slice(0, 5).join(" ")}`,
+            success: false,
+          };
+        }
+      }
       const activeBinSet = await tx.query.binSets.findFirst({
         where: (t) => activeBinSetWhere(t, orgId, gameId),
         columns: { id: true, guid: true },
