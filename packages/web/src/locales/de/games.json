@@ -84,7 +84,8 @@
     "search": "Suchen",
     "loading": "Wird gesucht…",
     "loadError": "Für diese Suche konnte keine Beispielkarte gefunden werden.",
-    "sampleName": "Beispiel: {{name}}"
+    "sampleName": "Beispiel: {{name}}",
+    "addAll": "Alle Felder dieser Karte hinzufügen"
   },
   "fieldDefinitionsEditor": {
     "heading": "Felder",

@@ -98,7 +98,8 @@
     "selectPlaceholder": "Sélectionner...",
     "when": "Quand",
     "valuePlaceholder": "Valeur...",
-    "freeformMultiPlaceholder": "Valeurs séparées par des virgules..."
+    "freeformMultiPlaceholder": "Valeurs séparées par des virgules...",
+    "advancedOperators": "Avancé"
   },
   "ruleGroupEditor": {
     "emptyState": "Aucune condition. Ajoute une condition ou un groupe pour commencer.",
@@ -318,5 +319,31 @@
   },
   "planLock": {
     "badge": "Mise à niveau"
+  },
+  "ruleTools": {
+    "testHeading": "Tester une carte",
+    "testDescription": "Recherchez une carte pour voir dans quel bac elle va et si cette règle s'applique.",
+    "searchPlaceholder": "Nom de la carte...",
+    "search": "Tester",
+    "searching": "Recherche...",
+    "notFound": "Impossible de charger cette carte.",
+    "goesTo": "Va dans le bac {{bin}} avec les règles enregistrées.",
+    "goesToNone": "Aucun bac ne correspond à cette carte.",
+    "draftMatches": "Cette règle s'applique à la carte.",
+    "draftNoMatch": "Cette règle ne s'applique pas à la carte.",
+    "countButton": "Compter les cartes correspondantes",
+    "counting": "Comptage...",
+    "countResult": "{{matched}} cartes sur {{total}} de cette collection correspondent.",
+    "countError": "Impossible de compter les cartes.",
+    "countNeedsCollection": "Choisissez d'abord une collection.",
+    "orderHeading": "Quel bac l'emporte",
+    "orderDescription": "Une carte va dans le premier bac correspondant ci-dessous. Les bacs prioritaires sont vérifiés d'abord, du numéro de priorité le plus bas au plus haut. Ensuite les bacs normaux dans l'ordre des bacs. Enfin le bac fourre-tout.",
+    "orderOverrides": "Bacs prioritaires",
+    "orderNormal": "Bacs normaux (le premier qui correspond l'emporte)",
+    "orderCatchAll": "Fourre-tout",
+    "orderPriority": "priorité {{priority}}",
+    "orderNoPriority": "aucune priorité",
+    "orderBin": "Bac {{bin}}",
+    "orderEmpty": "Aucun"
   }
 }

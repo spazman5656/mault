@@ -84,7 +84,8 @@
     "search": "Rechercher",
     "loading": "Recherche…",
     "loadError": "Aucune carte d'exemple trouvée pour cette recherche.",
-    "sampleName": "Exemple : {{name}}"
+    "sampleName": "Exemple : {{name}}",
+    "addAll": "Ajouter tous les champs de cette carte"
   },
   "fieldDefinitionsEditor": {
     "heading": "Champs",

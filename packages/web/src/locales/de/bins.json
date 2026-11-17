@@ -98,7 +98,8 @@
     "selectPlaceholder": "Auswählen...",
     "when": "Wenn",
     "valuePlaceholder": "Wert...",
-    "freeformMultiPlaceholder": "Werte, durch Komma getrennt..."
+    "freeformMultiPlaceholder": "Werte, durch Komma getrennt...",
+    "advancedOperators": "Erweitert"
   },
   "ruleGroupEditor": {
     "emptyState": "Keine Bedingungen. Füge eine Bedingung oder Gruppe hinzu, um zu beginnen.",
@@ -318,5 +319,31 @@
   },
   "planLock": {
     "badge": "Upgrade"
+  },
+  "ruleTools": {
+    "testHeading": "Karte testen",
+    "testDescription": "Suche eine Karte, um zu sehen, in welches Fach sie sortiert wird und ob diese Regel zutrifft.",
+    "searchPlaceholder": "Kartenname...",
+    "search": "Testen",
+    "searching": "Suche läuft...",
+    "notFound": "Diese Karte konnte nicht geladen werden.",
+    "goesTo": "Kommt mit den gespeicherten Regeln in Fach {{bin}}.",
+    "goesToNone": "Kein Fach passt zu dieser Karte.",
+    "draftMatches": "Diese Regel trifft auf die Karte zu.",
+    "draftNoMatch": "Diese Regel trifft nicht auf die Karte zu.",
+    "countButton": "Passende Karten zählen",
+    "counting": "Zähle...",
+    "countResult": "{{matched}} von {{total}} Karten in dieser Sammlung passen.",
+    "countError": "Karten konnten nicht gezählt werden.",
+    "countNeedsCollection": "Wähle zuerst eine Sammlung.",
+    "orderHeading": "Welches Fach gewinnt",
+    "orderDescription": "Eine Karte kommt in das erste passende Fach unten. Zuerst werden Überschreibungsfächer geprüft, niedrigste Prioritätsnummer zuerst. Danach normale Fächer in Fachreihenfolge. Zuletzt das Auffangfach.",
+    "orderOverrides": "Überschreibungsfächer",
+    "orderNormal": "Normale Fächer (erster Treffer gewinnt)",
+    "orderCatchAll": "Auffangfach",
+    "orderPriority": "Priorität {{priority}}",
+    "orderNoPriority": "keine Priorität",
+    "orderBin": "Fach {{bin}}",
+    "orderEmpty": "Keine"
   }
 }
