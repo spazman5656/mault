@@ -96,6 +96,7 @@
   "conditionRow": {
     "noFields": "No matching fields",
     "selectPlaceholder": "Select...",
+    "when": "When",
     "valuePlaceholder": "Value...",
     "advancedOperators": "Advanced",
     "freeformMultiPlaceholder": "Comma-separated values..."

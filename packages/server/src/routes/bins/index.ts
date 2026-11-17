@@ -10,6 +10,7 @@ import { editBinRoute } from "./edit-bin";
 import { emptyAllBinsRoute } from "./empty-all-bins";
 import { emptyBinRoute } from "./empty-bin";
 import { binSetHistoryRoute } from "./history";
+import { binFieldValuesRoute } from "./field-values";
 import { listBinSetsRoute } from "./list";
 import { binMatchCountRoute } from "./match-count";
 import { resetAutoAssignRoute } from "./reset-auto-assign";
@@ -27,6 +28,7 @@ const router = new Hono<AppEnv>()
   .route("/", checkBinSetNameRoute)
   .route("/", listBinSetsRoute)
   .route("/", binMatchCountRoute)
+  .route("/", binFieldValuesRoute)
   .route("/", setBinSetActiveRoute)
   .route("/", addBinSetRoute)
   .route("/", copyBinSetRoute)

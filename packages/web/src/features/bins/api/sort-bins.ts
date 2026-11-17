@@ -100,6 +100,15 @@ export async function getRuleMatchCount(
   );
 }
 
+export async function getFieldValues(
+  field: string,
+  collectionGuid: string,
+): Promise<Result<{ values: string[] }>> {
+  return apiGet<Result<{ values: string[] }>>(
+    `/api/bins/bins/field-values?${new URLSearchParams({ collectionGuid, field })}`,
+  );
+}
+
 export async function emptyBin(
   binNumber: number,
   gameGuid?: string,

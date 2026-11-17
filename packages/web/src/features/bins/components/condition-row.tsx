@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getFieldValues } from "@/features/bins/api/sort-bins";
 import { useBinConfigs } from "@/features/bins/api/use-bin-configs";
 import { useCollections } from "@/features/collections/api/use-collections";
 import {
@@ -45,7 +46,8 @@ import {
 } from "@/lib/constants/bins";
 import { cn, sortByLabel } from "@/lib/utils";
 import { IconChevronDown, IconX } from "@tabler/icons-react";
-import { useCallback, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const ADVANCED_OPERATORS: ConditionOperator[] = [
@@ -181,6 +183,23 @@ export function ConditionRow({
     !!activeCollection?.lang &&
     activeCollection.lang !== "en" &&
     !isScanRuleField(condition.field, fieldDefinitions);
+
+  const listId = useId();
+  const suggestionsWanted =
+    !!fieldMeta &&
+    !!activeCollection?.guid &&
+    fieldMeta.type !== "numeric" &&
+    !fieldMeta.options &&
+    !COUNT_OPERATORS.includes(condition.operator);
+  const { data: valueSuggestions } = useQuery({
+    queryKey: ["bin-field-values", activeCollection?.guid, condition.field],
+    queryFn: () => getFieldValues(condition.field, activeCollection!.guid),
+    enabled: suggestionsWanted,
+    staleTime: 5 * 60 * 1000,
+  });
+  const suggestions = valueSuggestions?.success
+    ? (valueSuggestions.data?.values ?? [])
+    : [];
 
   const handleFieldChange = useCallback(
     (field: ConditionField) => {
@@ -324,14 +343,24 @@ export function ConditionRow({
     }
 
     return (
-      <Input
-        type="text"
-        placeholder={t("conditionRow.valuePlaceholder")}
-        maxLength={CONDITION_STRING_MAX_LENGTH}
-        className={cn("min-w-24 flex-1", CONDITION_INPUT_CLASS)}
-        value={String(condition.value)}
-        onChange={(e) => handleValueChange(e.target.value)}
-      />
+      <>
+        <Input
+          type="text"
+          list={suggestions.length > 0 ? listId : undefined}
+          placeholder={t("conditionRow.valuePlaceholder")}
+          maxLength={CONDITION_STRING_MAX_LENGTH}
+          className={cn("min-w-24 flex-1", CONDITION_INPUT_CLASS)}
+          value={String(condition.value)}
+          onChange={(e) => handleValueChange(e.target.value)}
+        />
+        {suggestions.length > 0 && (
+          <datalist id={listId}>
+            {suggestions.map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   };
 
@@ -340,6 +369,9 @@ export function ConditionRow({
       className="flex flex-wrap items-start gap-1.5 max-md:rounded-lg max-md:bg-card max-md:p-2 max-md:ring-1 max-md:ring-border"
       data-tour="condition-row"
     >
+      <span className="self-center text-sm text-muted-foreground">
+        {t("conditionRow.when")}
+      </span>
       <Combobox
         items={sortedFields}
         value={fieldMeta ?? null}

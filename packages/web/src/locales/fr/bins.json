@@ -96,6 +96,7 @@
   "conditionRow": {
     "noFields": "Aucun champ correspondant",
     "selectPlaceholder": "Sélectionner...",
+    "when": "Quand",
     "valuePlaceholder": "Valeur...",
     "freeformMultiPlaceholder": "Valeurs séparées par des virgules..."
   },
