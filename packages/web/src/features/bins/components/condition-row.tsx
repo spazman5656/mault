@@ -28,7 +28,10 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -44,6 +47,15 @@ import { cn, sortByLabel } from "@/lib/utils";
 import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+const ADVANCED_OPERATORS: ConditionOperator[] = [
+  ...COUNT_OPERATORS,
+  "starts_with",
+  "ends_with",
+  "contains_any",
+  "contains_all",
+  "contains_none",
+];
 
 function FreeformMultiInput({
   value,
@@ -146,6 +158,24 @@ export function ConditionRow({
   const sortedFields = useMemo(
     () => sortByLabel(fieldDefinitions),
     [fieldDefinitions],
+  );
+  const commonOperators = useMemo(
+    () =>
+      (fieldMeta?.operators ?? []).filter(
+        (op) =>
+          !ADVANCED_OPERATORS.includes(op.value) ||
+          op.value === condition.operator,
+      ),
+    [fieldMeta, condition.operator],
+  );
+  const advancedOperators = useMemo(
+    () =>
+      (fieldMeta?.operators ?? []).filter(
+        (op) =>
+          ADVANCED_OPERATORS.includes(op.value) &&
+          op.value !== condition.operator,
+      ),
+    [fieldMeta, condition.operator],
   );
   const isFreeformOptions =
     !!activeCollection?.lang &&
@@ -356,11 +386,24 @@ export function ConditionRow({
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {fieldMeta.operators.map((op) => (
+            {commonOperators.map((op) => (
               <SelectItem key={op.value} value={op.value}>
                 {op.label}
               </SelectItem>
             ))}
+            {advancedOperators.length > 0 && (
+              <>
+                <SelectSeparator />
+                <SelectGroup>
+                  <SelectLabel>{t("conditionRow.advancedOperators")}</SelectLabel>
+                  {advancedOperators.map((op) => (
+                    <SelectItem key={op.value} value={op.value}>
+                      {op.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </>
+            )}
           </SelectContent>
         </Select>
       )}

@@ -1,5 +1,6 @@
 import type {
   BinConfig,
+  BinRuleGroup,
   BinSet,
   DefaultBinInit,
   EmptyAllBinsInput,
@@ -86,6 +87,16 @@ export async function saveBinConfig({
   return apiPut<Result<BinConfig[]>>(
     `/api/bins/bins/${binNumber}${params}`,
     body,
+  );
+}
+
+export async function getRuleMatchCount(
+  rules: BinRuleGroup,
+  collectionGuid: string,
+): Promise<Result<{ matched: number; total: number }>> {
+  return apiPost<Result<{ matched: number; total: number }>>(
+    `/api/bins/bins/match-count?${new URLSearchParams({ collectionGuid })}`,
+    { rules },
   );
 }
 

@@ -23,7 +23,9 @@ import { Switch } from "@/components/ui/switch";
 import { UnsavedChangesGuard } from "@/components/unsaved-changes-guard";
 import { useBinConfigs } from "@/features/bins/api/use-bin-configs";
 import { BinPickListFields } from "@/features/bins/components/bin-pick-list-fields";
+import { BinOrderPanel } from "@/features/bins/components/bin-order-panel";
 import { RuleGroupEditor } from "@/features/bins/components/rule-group-editor";
+import { RuleTester } from "@/features/bins/components/rule-tester";
 import { RuleSummary } from "@/features/bins/components/rule-summary";
 import { BinSettingRow } from "@/features/bins/components/bin-setting-row";
 import {
@@ -927,10 +929,14 @@ export function BinConfigPanel({ showTitle = true }: BinConfigPanelProps) {
           name="rules"
           control={form.control}
           render={({ field }) => (
-            <RuleGroupEditor
-              group={field.value as BinRuleGroup}
-              onChange={field.onChange}
-            />
+            <>
+              <RuleGroupEditor
+                group={field.value as BinRuleGroup}
+                onChange={field.onChange}
+              />
+              <RuleTester rules={field.value as BinRuleGroup} />
+              <BinOrderPanel />
+            </>
           )}
         />
       )}

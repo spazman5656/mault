@@ -11,6 +11,7 @@ import { emptyAllBinsRoute } from "./empty-all-bins";
 import { emptyBinRoute } from "./empty-bin";
 import { binSetHistoryRoute } from "./history";
 import { listBinSetsRoute } from "./list";
+import { binMatchCountRoute } from "./match-count";
 import { resetAutoAssignRoute } from "./reset-auto-assign";
 import { revertBinSetRoute } from "./revert";
 import { setBinSetActiveRoute } from "./set-active";
@@ -25,6 +26,7 @@ import { setSkipSavingRoute } from "./set-skip-saving";
 const router = new Hono<AppEnv>()
   .route("/", checkBinSetNameRoute)
   .route("/", listBinSetsRoute)
+  .route("/", binMatchCountRoute)
   .route("/", setBinSetActiveRoute)
   .route("/", addBinSetRoute)
   .route("/", copyBinSetRoute)
