@@ -812,6 +812,29 @@
       "description": "Le serveur a refusé un scan en attente d'enregistrement. Vérifiez qu'il ne manque pas de carte dans la collection."
     }
   },
+  "scanLight": {
+    "label": "Lumière de scan",
+    "description": "Luminosité de la bande LED qui éclaire la zone de scan des cartes.",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "brownoutNote": "Le trieur a redémarré après une chute de tension, la lumière est donc limitée à {{max}}% jusqu'à un nouveau déverrouillage.",
+    "caution": {
+      "title": "Luminosité élevée",
+      "body": "À {{from}}-{{to}}%, environ 1,8-2,5 A passent par le fil fin et le connecteur de la bande. Ils peuvent chauffer. Vérifiez-les au toucher après quelques minutes.",
+      "confirm": "J'ai compris, appliquer"
+    },
+    "locked": {
+      "title": "Très forte luminosité",
+      "risks": "Au-dessus de 70%, la bande tire 2,6-3,6 A par son fil d'origine et son connecteur, souvent prévus pour 2-3 A seulement. Un fil fin ou mal serré peut surchauffer, fondre ou provoquer un incendie.",
+      "checksTitle": "Confirmer avant d'aller plus haut",
+      "check1": "Le fil de la bande fait 20 AWG ou plus, ou son connecteur est contourné.",
+      "check2": "Le boîtier laisse circuler l'air autour de la bande, du fil et du connecteur.",
+      "check3": "J'ai d'abord vérifié la chaleur du fil et du connecteur à 70%.",
+      "typeTitle": "Saisir pour déverrouiller",
+      "typeBody": "Saisissez {{word}} pour autoriser plus de 70% pendant cette session.",
+      "unlock": "Déverrouiller"
+    }
+  },
   "mobileScan": {
     "chooseCollection": "Choisir une collection",
     "collection": "Collection",

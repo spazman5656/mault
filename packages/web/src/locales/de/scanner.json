@@ -812,6 +812,29 @@
       "description": "Der Server hat einen Scan abgelehnt, der noch gespeichert werden sollte. Prüfe die Sammlung auf die fehlende Karte."
     }
   },
+  "scanLight": {
+    "label": "Scanlicht",
+    "description": "Helligkeit des LED-Streifens, der den Kartenscanbereich beleuchtet.",
+    "cancel": "Abbrechen",
+    "next": "Weiter",
+    "brownoutNote": "Der Sortierer ist nach einem Spannungseinbruch neu gestartet, daher ist das Licht auf {{max}}% begrenzt, bis du es erneut freischaltest.",
+    "caution": {
+      "title": "Höhere Helligkeit",
+      "body": "Bei {{from}}-{{to}}% fließen etwa 1,8-2,5 A durch die dünne Zuleitung und den Stecker des Streifens. Sie können warm werden. Prüfe sie nach einigen Minuten auf Wärme.",
+      "confirm": "Verstanden, einstellen"
+    },
+    "locked": {
+      "title": "Sehr hohe Helligkeit",
+      "risks": "Über 70% zieht der Streifen 2,6-3,6 A durch seine werkseitige Zuleitung und den Stecker, die oft nur für 2-3 A ausgelegt sind. Eine dünne oder lose Leitung kann überhitzen, schmelzen oder einen Brand auslösen.",
+      "checksTitle": "Vor dem Erhöhen bestätigen",
+      "check1": "Die Zuleitung des Streifens hat mindestens 20 AWG, oder der Stecker ist überbrückt.",
+      "check2": "Das Gehäuse hat Luftzirkulation um Streifen, Leitung und Stecker.",
+      "check3": "Ich habe Leitung und Stecker zuerst bei 70% auf Wärme geprüft.",
+      "typeTitle": "Zum Freischalten eintippen",
+      "typeBody": "Tippe {{word}} ein, um für diese Sitzung eine Helligkeit über 70% zu erlauben.",
+      "unlock": "Freischalten"
+    }
+  },
   "mobileScan": {
     "chooseCollection": "Sammlung wählen",
     "collection": "Sammlung",

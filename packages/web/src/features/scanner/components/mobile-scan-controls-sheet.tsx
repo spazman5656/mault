@@ -4,6 +4,7 @@ import { MobileSegmentedControl } from "@/components/mobile-segmented-control";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { useRetractCard } from "@/features/scanner/api/use-retract-card";
 import { useScanRemoval } from "@/features/scanner/api/use-scan-removal";
+import { ScanLightControl } from "@/features/scanner/components/scan-light-control";
 import { MOBILE_LIST_CLASS, MOBILE_SORTER_PATH } from "@/lib/constants/nav";
 import { SESSION_TIMER_RUNNING_STATUSES } from "@/lib/constants/scanner";
 import type {
@@ -103,6 +104,7 @@ export function MobileScanControlsSheet({
               onClick={chrome.onResetDevice}
             />
           </div>
+          <ScanLightControl />
           <div className={MOBILE_LIST_CLASS}>
             <MobileListRow
               icon={<IconCpu />}

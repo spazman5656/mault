@@ -18,6 +18,7 @@ import { useDeviceCalibrationSync } from "@/features/calibration/api/use-device-
 import { FeederCalibrationPanel } from "@/features/calibration/components/feeder-calibration-panel";
 import { ModuleCalibrationGrid } from "@/features/calibration/components/module-calibration-grid";
 import { OfflineCalibrationBanner } from "@/features/calibration/components/offline-calibration-banner";
+import { ScanLightControl } from "@/features/scanner/components/scan-light-control";
 import { SorterCalibrationSection } from "@/features/calibration/components/sorter-calibration-section";
 import { useSorterModelBeta } from "@/features/calibration/lib/sorter-model-beta";
 import { IconClockHour3, IconRestore } from "@tabler/icons-react";
@@ -338,6 +339,8 @@ export default function CalibrateCalibrationPage() {
           </>
         }
       />
+
+      {isConnected && <ScanLightControl />}
 
       {!modelEnabled && (
         <>

@@ -812,6 +812,29 @@
       "description": "The server refused a scan that was waiting to be saved. Check the collection for the missing card."
     }
   },
+  "scanLight": {
+    "label": "Scan light",
+    "description": "Brightness of the LED strip that lights the card scanning area.",
+    "cancel": "Cancel",
+    "next": "Next",
+    "brownoutNote": "The sorter restarted from a power dip, so the light is limited to {{max}}% until you unlock it again.",
+    "caution": {
+      "title": "Higher brightness",
+      "body": "Brightness {{from}}-{{to}}% draws about 1.8-2.5 A through the strip's thin lead and connector. They can warm up. Check them for heat after a few minutes.",
+      "confirm": "I understand, set it"
+    },
+    "locked": {
+      "title": "Very high brightness",
+      "risks": "Above 70% the strip draws 2.6-3.6 A through its factory lead and connector, which are often rated for only 2-3 A. A thin or loose lead can overheat, melt or start a fire.",
+      "checksTitle": "Confirm before going higher",
+      "check1": "The strip's lead is 20 AWG or thicker, or its connector is bypassed.",
+      "check2": "The enclosure has airflow around the strip, lead and connector.",
+      "check3": "I checked the lead and connector for warmth at 70% first.",
+      "typeTitle": "Type to unlock",
+      "typeBody": "Type {{word}} to allow brightness above 70% for this session.",
+      "unlock": "Unlock"
+    }
+  },
   "mobileScan": {
     "chooseCollection": "Choose a collection",
     "collection": "Collection",
