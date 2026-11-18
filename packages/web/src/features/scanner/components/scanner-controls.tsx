@@ -21,6 +21,7 @@ import { useScanRemoval } from "@/features/scanner/api/use-scan-removal";
 import { useRetractCard } from "@/features/scanner/api/use-retract-card";
 import { useStation, useStations } from "@/features/scanner/api/use-stations";
 import { ForcedSetPicker } from "@/features/scanner/components/forced-set-picker";
+import { ScanLightControl } from "@/features/scanner/components/scan-light-control";
 import { ScanModeSwitch } from "@/features/scanner/components/scan-mode-switch";
 import { ScanRemovalBinSelect } from "@/features/scanner/components/scan-removal-bin-select";
 import { ScannerDebug } from "@/features/scanner/components/scanner-debug";
@@ -372,6 +373,7 @@ export function ScannerControls({
         </DropdownMenu>
         <ForcedSetPicker open={setPickerOpen} onOpenChange={setSetPickerOpen} />
       </div>
+      {isSorterConnected && <ScanLightControl />}
       {(sessionScanCount > 0 || elapsedMs > 0) && (
         <p className="text-xs tabular-nums text-foreground/70">
           {t("scannerControls.sessionSummary", {

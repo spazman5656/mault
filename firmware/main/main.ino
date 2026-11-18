@@ -1506,6 +1506,10 @@ void printStatus(Print& reply, bool live) {
   if (live) {
     reply.print(F(",\"uptimeMs\":"));
     reply.print(millis());
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+    reply.print(F(",\"light\":"));
+    reply.print(lightTarget);
+#endif
 #if BLE_SUPPORTED
     if (bleMtu() > 0) {
       reply.print(F(",\"bleMtu\":"));

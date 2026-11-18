@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSerial } from "@/features/scanner/api/use-serial";
 import {
+  levelToPercent,
   percentToLevel,
   SCAN_LIGHT_CAUTION_MAX_PERCENT,
   SCAN_LIGHT_DEFAULT_PERCENT,
@@ -28,7 +29,8 @@ type Pending = { percent: number; stage: 0 | 1 | 2 | 3 } | null;
 
 // Brightness slider for the sorter's scan-area light (ESP32-S3 builds). Free
 // levels move at once, higher levels need confirmation for the session. The
-// device does not report its level, so the slider starts at the default.
+// device reports its level in getStatus, so the slider starts there (the
+// default for older firmware).
 export function ScanLightControl() {
   const { t } = useTranslation("scanner");
   const { sendRequest, subscribe, isConnected } = useSerial();
@@ -58,6 +60,23 @@ export function ScanLightControl() {
       }),
     [subscribe],
   );
+
+  useEffect(() => {
+    if (!isConnected) return;
+    let cancelled = false;
+    void sendRequest({ getStatus: true })
+      .then(({ line }) => {
+        const light = parseSerialReply(line)?.light;
+        if (cancelled || typeof light !== "number") return;
+        const next = levelToPercent(light);
+        setPercent(next);
+        appliedRef.current = next;
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [isConnected, sendRequest]);
 
   const send = useCallback(
     async (next: number) => {

@@ -14,6 +14,10 @@ export function percentToLevel(percent: number): number {
   return Math.round((percent / 100) * 255);
 }
 
+export function levelToPercent(level: number): number {
+  return Math.min(100, Math.max(0, Math.round((level / 255) * 100)));
+}
+
 export function scanLightTier(percent: number): ScanLightTier {
   if (percent <= SCAN_LIGHT_FREE_MAX_PERCENT) return "free";
   if (percent <= SCAN_LIGHT_CAUTION_MAX_PERCENT) return "caution";

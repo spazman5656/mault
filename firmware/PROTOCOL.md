@@ -326,6 +326,10 @@ Firmware 2.10.0+ on ESP32 (and the first firmware release after 2.10.1 on the Un
 `getWifi` for details. The app treats the presence of `"wifi"` as the board
 supporting Wi-Fi remote access.
 
+ESP32-S3 builds with the scan-area light also add `"light": N` (0-255) to the
+`getStatus` reply (not the boot banner): the current target brightness, which
+is the saved level after a boot. The app uses it to start its slider there.
+
 ### `setChannelOffset`
 ```json
 {"setChannelOffset": 0}
