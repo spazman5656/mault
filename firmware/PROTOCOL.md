@@ -333,6 +333,18 @@ supporting Wi-Fi remote access.
 `0` = standard layout, `4` = legacy layout. Also resets every servo to
 neutral. → `{"status":"ok"}`
 
+### `setLight` (ESP32-S3 builds only)
+```json
+{"setLight": 64}
+```
+Scan-area light: constant white on the 60-LED WS2812B strip wired to GPIO 10.
+`0` = off, `255` = full. Applies at once. `storeConfig` saves the level and the
+device restores it on boot (default `64`). The strip stays dark until setup
+finishes, then fades up over about a second, and stays off after repeated
+brownout boots. The firmware does not cap brightness. → `{"status":"ok"}`, or
+`{"error":"setLight must be 0-255"}`. Other boards answer
+`{"error":"unknown command"}`.
+
 ### `test`
 ```json
 {"test": true}

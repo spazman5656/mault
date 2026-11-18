@@ -5,6 +5,9 @@
 #include <Wire.h>
 #include <ctype.h>
 #include <Adafruit_PWMServoDriver.h>
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+#include <Adafruit_NeoPixel.h>
+#endif
 #if defined(ARDUINO_ARCH_ESP32)
 #include "esp_mac.h"
 #include "esp_system.h"
@@ -774,6 +777,83 @@ void ensureServoDriver() {
   if (pwm.readPrescale() != expected) recoverServoDriver();
 }
 
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+// Scan-area light: a 60-LED WS2812B strip on LED_PIN, constant white. Lighting
+// for the camera, not a status display. Brightness 0-255 (0 = off), set with
+// {"setLight": N} and saved by storeConfig. The strip stays dark at boot until
+// setup finishes, then fades up, and stays off after repeated brownouts.
+#define LED_PIN 10
+#define LED_COUNT 60
+#define LED_DEFAULT_LEVEL 64
+#define LIGHT_EEPROM_ADDR 8
+#define LIGHT_EEPROM_MAGIC 0xD3
+#define LIGHT_RAMP_STEP_MS 10
+
+Adafruit_NeoPixel lightStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+uint8_t lightTarget = LED_DEFAULT_LEVEL;
+uint8_t lightShown = 0;
+bool lightRamping = false;
+bool lightAllowed = false;
+unsigned long lightLastStepMs = 0;
+
+void writeLight(uint8_t level) {
+  lightStrip.fill(lightStrip.Color(level, level, level));
+  lightStrip.show();
+  lightShown = level;
+}
+
+void loadLight() {
+  if (EEPROM.read(LIGHT_EEPROM_ADDR) == LIGHT_EEPROM_MAGIC) {
+    lightTarget = EEPROM.read(LIGHT_EEPROM_ADDR + 1);
+  }
+}
+
+bool persistLight() {
+  if (EEPROM.read(LIGHT_EEPROM_ADDR) == LIGHT_EEPROM_MAGIC &&
+      EEPROM.read(LIGHT_EEPROM_ADDR + 1) == lightTarget) {
+    return false;
+  }
+  EEPROM.write(LIGHT_EEPROM_ADDR, 0);
+  EEPROM.write(LIGHT_EEPROM_ADDR + 1, lightTarget);
+  EEPROM.write(LIGHT_EEPROM_ADDR, LIGHT_EEPROM_MAGIC);
+  EEPROM.commit();
+  return true;
+}
+
+void initLight() {
+  lightStrip.begin();
+  writeLight(0);
+}
+
+// Called once at the end of setup(): lets the strip light, fading up.
+void startLight() {
+  if (bootingAfterRepeatedBrownouts()) return;
+  lightAllowed = true;
+  lightRamping = lightShown != lightTarget;
+  lightLastStepMs = millis();
+}
+
+void setLight(uint8_t level) {
+  lightTarget = level;
+  lightRamping = false;
+  if (lightAllowed && lightShown != level) writeLight(level);
+}
+
+// Writes the strip only when the value changes, since show() blocks briefly.
+void updateLight() {
+  if (!lightAllowed || !lightRamping) return;
+  if (millis() - lightLastStepMs < LIGHT_RAMP_STEP_MS) return;
+  lightLastStepMs = millis();
+  int step = lightTarget / 100 + 1;
+  int next = lightShown + step;
+  if (next >= lightTarget) {
+    next = lightTarget;
+    lightRamping = false;
+  }
+  writeLight((uint8_t)next);
+}
+#endif
+
 bool servoDriverPresent() {
   Wire.beginTransmission(SERVO_DRIVER_I2C_ADDR);
   if (Wire.endTransmission() == 0) return true;
@@ -1479,6 +1559,20 @@ void runCommand(JsonDocument& doc, Print& reply) {
     return;
   }
 
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+  // {"setLight": N} — scan-area light brightness, 0-255 (0 = off).
+  if (doc["setLight"].is<int>()) {
+    int level = doc["setLight"].as<int>();
+    if (level < 0 || level > 255) {
+      reply.println(F("{\"error\":\"setLight must be 0-255\"}"));
+      return;
+    }
+    setLight((uint8_t)level);
+    reply.println(F("{\"status\":\"ok\"}"));
+    return;
+  }
+#endif
+
   // {"test": true} — run a full mechanical test sequence then confirm connection
   if (isTrue(doc["test"])) {
     if (!servoDriverPresent()) {
@@ -1691,6 +1785,9 @@ void runCommand(JsonDocument& doc, Print& reply) {
 
   if (isTrue(doc["storeConfig"])) {
     bool written = persistConfig();
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+    if (persistLight()) written = true;
+#endif
     reply.print(F("{\"status\":\"ok\",\"written\":"));
     printBool(written, reply);
     reply.println(F("}"));
@@ -1778,6 +1875,10 @@ void setup() {
   }
   beginEeprom();
   loadStoredConfig();
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+  loadLight();
+  initLight();
+#endif
 
   // All MAX_MODULES pins are set up regardless of the eventual offset/module
   // count - harmless, and the app hasn't told us the offset yet.
@@ -1828,6 +1929,9 @@ void setup() {
   printStatus(banner, false);
 
   startWatchdog();
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+  startLight();
+#endif
 }
 
 void loop() {
@@ -1838,6 +1942,9 @@ void loop() {
   pumpInput();
   checkModuleJams();
   releaseIdleServos();
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+  updateLight();
+#endif
 #if defined(RGB_BUILTIN)
   updateStatusLed();
 #endif
