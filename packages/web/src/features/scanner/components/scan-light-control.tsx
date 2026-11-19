@@ -116,7 +116,13 @@ export function ScanLightControl() {
     [send],
   );
 
+  // Level before the current drag began, so cancelling a gated level goes back
+  // there and not to whatever Free level the live preview last sent.
+  const dragStartRef = useRef<number | null>(null);
+  const restoreRef = useRef(SCAN_LIGHT_DEFAULT_PERCENT);
+
   const handleDrag = (value: number) => {
+    if (dragStartRef.current === null) dragStartRef.current = appliedRef.current;
     setPercent(value);
     if (scanLightTier(value) === "free") sendLive(value);
   };
@@ -129,6 +135,8 @@ export function ScanLightControl() {
 
   const commit = (next: number) => {
     liveRef.current.next = null;
+    restoreRef.current = dragStartRef.current ?? appliedRef.current;
+    dragStartRef.current = null;
     const tier = scanLightTier(next);
     if (tier === "locked" && (brownoutLocked || !lockedUnlocked)) {
       setPending({ percent: next, stage: 1 });
@@ -144,7 +152,9 @@ export function ScanLightControl() {
 
   const cancelPending = () => {
     resetDialog();
-    setPercent(appliedRef.current);
+    const back = restoreRef.current;
+    setPercent(back);
+    if (back !== appliedRef.current) void send(back);
   };
 
   if (!isConnected || unsupported) return null;
