@@ -79,12 +79,21 @@ export function ScanLightControl() {
   }, [isConnected, sendRequest]);
 
   const send = useCallback(
-    async (next: number) => {
+    async (next: number, persist = false) => {
       appliedRef.current = next;
       try {
         const { line } = await sendRequest({ setLight: percentToLevel(next) });
         const parsed = parseSerialReply(line);
-        if (parsed?.status !== "ok") setUnsupported(true);
+        if (parsed?.status !== "ok") {
+          setUnsupported(true);
+          return;
+        }
+        // Save the settled level so it survives a power cycle. Free levels only:
+        // the device loads the saved level at boot with no confirmation, so a
+        // Caution or Locked level must never be stored.
+        if (persist && scanLightTier(next) === "free") {
+          await sendRequest({ storeConfig: true });
+        }
       } catch {
         setUnsupported(true);
       }
@@ -147,14 +156,14 @@ export function ScanLightControl() {
       return;
     }
     setPercent(next);
-    void send(next);
+    void send(next, true);
   };
 
   const cancelPending = () => {
     resetDialog();
     const back = restoreRef.current;
     setPercent(back);
-    if (back !== appliedRef.current) void send(back);
+    if (back !== appliedRef.current) void send(back, true);
   };
 
   if (!isConnected || unsupported) return null;
@@ -202,7 +211,7 @@ export function ScanLightControl() {
                 setCautionAcked(true);
                 resetDialog();
                 setPercent(next);
-                void send(next);
+                void send(next, true);
               }}
             >
               {t("scanLight.caution.confirm")}
@@ -289,7 +298,7 @@ export function ScanLightControl() {
                 setBrownoutLocked(false);
                 resetDialog();
                 setPercent(next);
-                void send(next);
+                void send(next, true);
               }}
             >
               {t("scanLight.locked.unlock")}
