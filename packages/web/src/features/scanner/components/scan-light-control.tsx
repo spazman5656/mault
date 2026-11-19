@@ -92,6 +92,35 @@ export function ScanLightControl() {
     [sendRequest],
   );
 
+  // Live preview while dragging, Free levels only. One request in flight at a
+  // time, the newest value waits its turn, so the serial link never queues up.
+  const liveRef = useRef<{ busy: boolean; next: number | null }>({
+    busy: false,
+    next: null,
+  });
+  const sendLive = useCallback(
+    (value: number) => {
+      const state = liveRef.current;
+      if (state.busy) {
+        state.next = value;
+        return;
+      }
+      state.busy = true;
+      void send(value).finally(() => {
+        state.busy = false;
+        const queued = state.next;
+        state.next = null;
+        if (queued !== null) sendLive(queued);
+      });
+    },
+    [send],
+  );
+
+  const handleDrag = (value: number) => {
+    setPercent(value);
+    if (scanLightTier(value) === "free") sendLive(value);
+  };
+
   const resetDialog = () => {
     setPending(null);
     setChecks([false, false, false]);
@@ -99,6 +128,7 @@ export function ScanLightControl() {
   };
 
   const commit = (next: number) => {
+    liveRef.current.next = null;
     const tier = scanLightTier(next);
     if (tier === "locked" && (brownoutLocked || !lockedUnlocked)) {
       setPending({ percent: next, stage: 1 });
@@ -131,7 +161,7 @@ export function ScanLightControl() {
         min={0}
         max={100}
         value={percent}
-        onValueChange={setPercent}
+        onValueChange={handleDrag}
         onValueCommitted={commit}
       >
         {brownoutLocked && (
