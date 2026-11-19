@@ -32,7 +32,7 @@ export function ServiceMacroPanel({
   const count = clampMacroCount(Number(countText));
 
   return (
-    <SettingsSection label={t("serviceMacros.label")}>
+    <SettingsSection heading={t("serviceMacros.label")}>
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm">{t("serviceMacros.feedAndDrop.label")}</span>
         <input
