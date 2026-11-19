@@ -3,7 +3,7 @@ import {
   parseSerialReply,
 } from "@magic-vault/shared";
 
-export const MACRO_MAX_COUNT = 100;
+export const MACRO_MAX_COUNT = 50;
 const FEED_TIMEOUT_MS = 10000;
 
 export type MacroStopReason =

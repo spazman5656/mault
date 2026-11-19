@@ -28,7 +28,8 @@ export function ServiceMacroPanel({
   onStop,
 }: ServiceMacroPanelProps) {
   const { t } = useTranslation("calibration");
-  const [count, setCount] = useState(20);
+  const [countText, setCountText] = useState("7");
+  const count = clampMacroCount(Number(countText));
 
   return (
     <SettingsSection label={t("serviceMacros.label")}>
@@ -38,11 +39,12 @@ export function ServiceMacroPanel({
           type="number"
           min={1}
           max={MACRO_MAX_COUNT}
-          value={count}
+          value={countText}
           disabled={isRunning}
           aria-label={t("serviceMacros.count")}
           className="w-20 rounded-md border bg-background px-2 py-1 text-sm"
-          onChange={(e) => setCount(clampMacroCount(Number(e.target.value)))}
+          onChange={(e) => setCountText(e.target.value)}
+          onBlur={() => setCountText(String(count))}
         />
         <Button
           variant="outline"
