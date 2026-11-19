@@ -79,6 +79,22 @@
     "sampleRun": "Sample Run",
     "resetToNeutral": "Reset to neutral"
   },
+  "serviceMacros": {
+    "label": "Service macros",
+    "count": "Cycles",
+    "start": "Start",
+    "stop": "Stop",
+    "progress": "{{done}} of {{total}} done",
+    "feedAndDrop": { "label": "Feed and drop (cycles)" },
+    "reason": {
+      "completed": "Finished",
+      "stopped": "Stopped",
+      "empty": "Stopped: hopper empty",
+      "noCard": "Stopped: no card detected",
+      "error": "Stopped: command error",
+      "timeout": "Stopped: no reply from sorter"
+    }
+  },
   "feederCalibrationPanel": {
     "heading": "Feeder",
     "showAdvanced": "Show raw values",

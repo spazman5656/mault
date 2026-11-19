@@ -97,6 +97,7 @@ export default function CalibrateLayout() {
     isRetracting,
     retractLockedReason,
     isSampleRunning,
+    isMacroRunning,
     handleCopyCalibration,
     handleExportConfig,
     handleImportConfig,
@@ -163,14 +164,14 @@ export default function CalibrateLayout() {
               </Button>
               <Button
                 variant="outline"
-                disabled={!isReady || activeBin !== null || isSampleRunning}
+                disabled={!isReady || activeBin !== null || isSampleRunning || isMacroRunning}
                 onClick={handleFeed}
               >
                 {t("binRoutingControls.feed")}
               </Button>
               <Button
                 variant="outline"
-                disabled={!isReady || activeBin !== null || isSampleRunning}
+                disabled={!isReady || activeBin !== null || isSampleRunning || isMacroRunning}
                 onClick={handleDropCard}
               >
                 {t("binRoutingControls.dropCard")}
@@ -182,6 +183,7 @@ export default function CalibrateLayout() {
                   !isReady ||
                   activeBin !== null ||
                   isSampleRunning ||
+                  isMacroRunning ||
                   isRetracting ||
                   retractLockedReason !== null
                 }

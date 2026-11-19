@@ -79,6 +79,22 @@
     "sampleRun": "Testlauf",
     "resetToNeutral": "Grundstellung"
   },
+  "serviceMacros": {
+    "label": "Servicemakros",
+    "count": "Zyklen",
+    "start": "Start",
+    "stop": "Stopp",
+    "progress": "{{done}} von {{total}} erledigt",
+    "feedAndDrop": { "label": "Zuführen und abwerfen (Zyklen)" },
+    "reason": {
+      "completed": "Fertig",
+      "stopped": "Gestoppt",
+      "empty": "Gestoppt: Trichter leer",
+      "noCard": "Gestoppt: keine Karte erkannt",
+      "error": "Gestoppt: Befehlsfehler",
+      "timeout": "Gestoppt: keine Antwort vom Sortierer"
+    }
+  },
   "feederCalibrationPanel": {
     "heading": "Zuführung",
     "showAdvanced": "Rohwerte anzeigen",

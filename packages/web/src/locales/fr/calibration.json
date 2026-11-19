@@ -79,6 +79,22 @@
     "sampleRun": "Test d'exécution",
     "resetToNeutral": "Position neutre"
   },
+  "serviceMacros": {
+    "label": "Macros de service",
+    "count": "Cycles",
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "progress": "{{done}} sur {{total}} terminés",
+    "feedAndDrop": { "label": "Alimenter et lâcher (cycles)" },
+    "reason": {
+      "completed": "Terminé",
+      "stopped": "Arrêté",
+      "empty": "Arrêté : trémie vide",
+      "noCard": "Arrêté : aucune carte détectée",
+      "error": "Arrêté : erreur de commande",
+      "timeout": "Arrêté : pas de réponse du trieur"
+    }
+  },
   "feederCalibrationPanel": {
     "heading": "Chargeur",
     "showAdvanced": "Afficher les valeurs brutes",

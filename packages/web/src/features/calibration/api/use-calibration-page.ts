@@ -1,3 +1,4 @@
+import { useServiceMacroRun } from "@/features/calibration/api/use-service-macro-run";
 import {
   binRoutesQueryOptions,
   saveBinRoute,
@@ -911,6 +912,14 @@ export function useCalibrationPage() {
     await retractCard();
   }, [isReady, applyDraftsToDevice, retractCard]);
 
+  const {
+    isMacroRunning,
+    macroProgress,
+    macroResult,
+    startMacro,
+    stopMacro,
+  } = useServiceMacroRun({ isReady, sendRequest, applyDraftsToDevice });
+
   const readIR = useCallback(async () => {
     if (!isReady || irBusyRef.current || activeBinRef.current !== null) return;
     irBusyRef.current = true;
@@ -1107,6 +1116,11 @@ export function useCalibrationPage() {
     retractLockedReason,
     isSampleRunning,
     handleSampleRun,
+    isMacroRunning,
+    macroProgress,
+    macroResult,
+    startMacro,
+    stopMacro,
     irStates,
     hopperHasCards,
     irMonitoring,
