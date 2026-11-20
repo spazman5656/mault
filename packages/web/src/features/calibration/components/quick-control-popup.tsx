@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { computeBinCount } from "@magic-vault/shared";
 import {
-  IconChevronRight,
+  IconChevronUp,
   IconGripHorizontal,
   IconLoader2,
   IconMinus,
@@ -86,9 +86,9 @@ export function QuickControlPopup({
         onClick={() => setMinimized(false)}
         aria-label={t("quickControlPopup.expand")}
         title={t("quickControlPopup.expand")}
-        className="fixed bottom-24 left-0 z-50 flex items-center gap-2 rounded-r-lg border border-l-0 bg-background py-2 pr-2.5 pl-1.5 text-sm font-medium text-foreground shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="fixed bottom-0 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-t-lg border border-b-0 bg-background px-3 py-1.5 text-sm font-medium text-foreground shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <IconChevronRight size={16} className="text-foreground/70" />
+        <IconChevronUp size={16} className="text-foreground/70" />
         {t("quickControlPopup.title")}
       </button>
     );
