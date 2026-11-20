@@ -69,6 +69,12 @@
     "customHeightHint": "Environ {{count}} cartes à {{thickness}} mm chacune",
     "customHeightInvalid": "Saisissez entre {{min}} et {{max}} mm"
   },
+  "quickControlPopup": {
+    "title": "Commandes rapides",
+    "dragHandle": "Faire glisser pour déplacer",
+    "minimize": "Réduire les commandes rapides",
+    "expand": "Afficher les commandes rapides"
+  },
   "binRoutingControls": {
     "label": "Routage des bacs",
     "feed": "Alimenter",

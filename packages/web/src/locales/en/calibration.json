@@ -69,6 +69,12 @@
     "customHeightHint": "About {{count}} cards at {{thickness}} mm each",
     "customHeightInvalid": "Enter {{min}} to {{max}} mm"
   },
+  "quickControlPopup": {
+    "title": "Quick controls",
+    "dragHandle": "Drag to move",
+    "minimize": "Minimize quick controls",
+    "expand": "Show quick controls"
+  },
   "binRoutingControls": {
     "label": "Bin Routing",
     "feed": "Feed",

@@ -41,6 +41,11 @@ export const SUPPORT_PROMPT_STORAGE_KEY = "magic-vault:support-prompt";
 
 export const SCANNER_PIP_MINIMIZED_STORAGE_KEY =
   "magic-vault:scanner-pip-minimized";
+export const SCANNER_PIP_POSITION_STORAGE_KEY = "mault:scanner-pip-position";
+export const QUICK_CONTROL_POPUP_POSITION_STORAGE_KEY =
+  "mault:quick-control-popup-position";
+export const QUICK_CONTROL_POPUP_MINIMIZED_STORAGE_KEY =
+  "mault:quick-control-popup-minimized";
 
 
 export const CARD_TECHNICAL_DETAILS_STORAGE_KEY =

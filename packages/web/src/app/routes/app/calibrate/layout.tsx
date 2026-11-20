@@ -12,6 +12,7 @@ import {
 import { useCalibrationPage } from "@/features/calibration/api/use-calibration-page";
 import { useSetupWizard } from "@/features/calibration/api/use-setup-wizard";
 import { useRole } from "@/hooks/use-role";
+import { QuickControlPopup } from "@/features/calibration/components/quick-control-popup";
 import { CalibrationTour } from "@/features/calibration/components/calibration-tour";
 import { useIsSessionActive } from "@/features/scanner/api/use-is-session-active";
 import { SessionLockBanner } from "@/features/scanner/components/session-lock";
@@ -93,6 +94,7 @@ export default function CalibrateLayout() {
     handleTest,
     handleFeed,
     handleDropCard,
+    handleTestBin,
     handleRetractCard,
     isRetracting,
     retractLockedReason,
@@ -275,6 +277,17 @@ export default function CalibrateLayout() {
             </div>
           </SettingsSectionLayoutContext>
         </div>
+
+        <QuickControlPopup
+          activeBin={activeBin}
+          isReady={isReady}
+          isConnected={isConnected}
+          isSampleRunning={isSampleRunning}
+          isMacroRunning={isMacroRunning}
+          onTestBin={(bin) => void handleTestBin(bin)}
+          onFeed={() => void handleFeed()}
+          onDropCard={handleDropCard}
+        />
 
         <StaleDeviceDialog
           open={staleDialogOpen}

@@ -3,8 +3,17 @@ import { useScannedCards } from "@/features/scanner/api/use-scanned-cards";
 import { useStation, useStations } from "@/features/scanner/api/use-stations";
 import { ScannerPipPreview } from "@/features/scanner/components/scanner-pip-preview";
 import { StationStatusDot } from "@/features/scanner/components/station-status-dot";
-import { SCANNER_PIP_MINIMIZED_STORAGE_KEY } from "@/lib/constants/storage-keys";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useDraggablePosition } from "@/features/scanner/api/use-draggable-position";
+import {
+  SCANNER_PIP_MINIMIZED_STORAGE_KEY,
+  SCANNER_PIP_POSITION_STORAGE_KEY,
+} from "@/lib/constants/storage-keys";
+import { cn } from "@/lib/utils";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconGripHorizontal,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +34,9 @@ export function ScannerPip() {
   const { isTimerActive } = useScannedCards();
   const { totalCount } = useCollectionCardsSummary();
   const [minimized, setMinimizedState] = useState(readMinimized);
+  const { panelRef, style, isMoved, handleProps } = useDraggablePosition(
+    SCANNER_PIP_POSITION_STORAGE_KEY,
+  );
 
   const isVisible =
     !!panelLayout && !panelsDocked && connectedStationIds.has(station.id);
@@ -59,15 +71,31 @@ export function ScannerPip() {
   }
 
   return (
-    <ScannerPipPreview
-      variant="overlay"
-      className="fixed bottom-8 right-4 z-50 w-48 rounded-lg border shadow-xl"
-      onOpen={() => navigate("/app")}
-      action={{
-        label: t("scannerPip.minimize"),
-        icon: <IconChevronRight size={16} />,
-        onClick: () => setMinimized(true),
-      }}
-    />
+    <div
+      ref={panelRef}
+      style={style}
+      className={cn(
+        "fixed z-50 w-48 overflow-hidden rounded-lg border bg-background shadow-xl",
+        !isMoved && "bottom-8 right-4",
+      )}
+    >
+      <div
+        {...handleProps}
+        title={t("scannerPip.dragHandle")}
+        aria-label={t("scannerPip.dragHandle")}
+        className="flex h-5 cursor-grab touch-none select-none items-center justify-center border-b bg-muted/50 text-foreground/60 active:cursor-grabbing"
+      >
+        <IconGripHorizontal size={14} />
+      </div>
+      <ScannerPipPreview
+        variant="overlay"
+        onOpen={() => navigate("/app")}
+        action={{
+          label: t("scannerPip.minimize"),
+          icon: <IconChevronRight size={16} />,
+          onClick: () => setMinimized(true),
+        }}
+      />
+    </div>
   );
 }

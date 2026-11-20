@@ -15,6 +15,7 @@
     "openScanner": "Open scanner"
   },
   "scannerPip": {
+    "dragHandle": "Drag to move",
     "returnToScanner": "Back to scanner",
     "sorting": "Sorting",
     "paused": "Paused",
