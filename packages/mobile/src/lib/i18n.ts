@@ -4,9 +4,7 @@ import { APP_LANGUAGES, DEFAULT_LANGUAGE } from "@/lib/constants/i18n";
 import { LANGUAGE_PREFERENCE_KEY } from "@/lib/constants/storage-keys";
 import type { AppLanguage, LanguagePreference } from "@/lib/interfaces/i18n";
 import { readKv, writeKv } from "@/lib/storage/kv";
-import de from "@/locales/de.json";
 import en from "@/locales/en.json";
-import fr from "@/locales/fr.json";
 
 function deviceLanguage(): AppLanguage {
   try {
@@ -32,7 +30,7 @@ export function saveLanguagePreference(preference: LanguagePreference): void {
 }
 
 void i18n.use(initReactI18next).init({
-  resources: { en: { translation: en }, de: { translation: de }, fr: { translation: fr } },
+  resources: { en: { translation: en } },
   lng: resolveLanguage(readLanguagePreference()),
   fallbackLng: DEFAULT_LANGUAGE,
   interpolation: { escapeValue: false },
