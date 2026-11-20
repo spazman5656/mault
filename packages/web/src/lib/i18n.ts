@@ -48,9 +48,6 @@ function getInitialLanguage(): SupportedLanguage {
       return stored as SupportedLanguage;
     }
   } catch {}
-  const browserLang = navigator.language.toLowerCase();
-  if (browserLang.startsWith("de")) return "de";
-  if (browserLang.startsWith("fr")) return "fr";
   return "en";
 }
 

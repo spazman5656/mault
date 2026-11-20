@@ -22,11 +22,11 @@ export const LANGUAGE_LABELS: Record<string, string> = {
   zhs: "Chinese (Simplified)",
 };
 
-export const SUPPORTED_LANGUAGES = ["en", "de", "fr"] as const;
+// This build ships English (US) only. To add a language, add its code here and
+// a locales/<code>/ folder with every namespace file from locales/en/.
+export const SUPPORTED_LANGUAGES = ["en"] as const;
 export const LANGUAGE_NATIVE_NAMES: Record<SupportedLanguage, string> = {
   en: "English",
-  de: "Deutsch",
-  fr: "Français",
 };
 
 export const EMPTY_LANGUAGES: string[] = [];

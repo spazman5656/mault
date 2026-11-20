@@ -24,6 +24,8 @@ export function LanguageSwitcher() {
   const { i18n } = useTranslation();
   const current = i18n.language as SupportedLanguage;
 
+  if (SUPPORTED_LANGUAGES.length < 2) return null;
+
   return (
     <Select
       value={current}
@@ -50,6 +52,8 @@ export function LanguageSwitcherIcon({
 }) {
   const { t, i18n } = useTranslation();
   const current = i18n.language as SupportedLanguage;
+
+  if (SUPPORTED_LANGUAGES.length < 2) return null;
 
   return (
     <DropdownMenu>
