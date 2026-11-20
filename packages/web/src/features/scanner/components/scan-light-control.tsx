@@ -25,7 +25,10 @@ import { parseSerialReply, statusResetReason } from "@magic-vault/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-type Pending = { percent: number; stage: 0 | 1 | 2 | 3 } | null;
+const SCAN_LIGHT_READ_ATTEMPTS = 8;
+const SCAN_LIGHT_READ_RETRY_MS = 1000;
+
+type Pending ={ percent: number; stage: 0 | 1 | 2 | 3 } | null;
 
 // Brightness slider for the sorter's scan-area light (ESP32-S3 builds). Free
 // levels move at once, higher levels need confirmation for the session. The
@@ -36,6 +39,7 @@ export function ScanLightControl() {
   const { sendRequest, subscribe, isConnected } = useSerial();
   const [percent, setPercent] = useState(SCAN_LIGHT_DEFAULT_PERCENT);
   const appliedRef = useRef(SCAN_LIGHT_DEFAULT_PERCENT);
+  const touchedRef = useRef(false);
   const [cautionAcked, setCautionAcked] = useState(false);
   const [lockedUnlocked, setLockedUnlocked] = useState(false);
   const [brownoutLocked, setBrownoutLocked] = useState(false);
@@ -64,15 +68,31 @@ export function ScanLightControl() {
   useEffect(() => {
     if (!isConnected) return;
     let cancelled = false;
-    void sendRequest({ getStatus: true })
-      .then(({ line }) => {
-        const light = parseSerialReply(line)?.light;
-        if (cancelled || typeof light !== "number") return;
-        const next = levelToPercent(light);
-        setPercent(next);
-        appliedRef.current = next;
-      })
-      .catch(() => {});
+    // Opening the port resets the board, and the page reports connected before
+    // it has booted. Ask again until a live getStatus reply carries the level.
+    const read = async () => {
+      for (let attempt = 0; attempt < SCAN_LIGHT_READ_ATTEMPTS; attempt++) {
+        if (cancelled || touchedRef.current) return;
+        try {
+          const { line } = await sendRequest({ getStatus: true });
+          const light = parseSerialReply(line)?.light;
+          if (cancelled || touchedRef.current) return;
+          if (typeof light === "number") {
+            const next = levelToPercent(light);
+            setPercent(next);
+            appliedRef.current = next;
+            return;
+          }
+        } catch {
+          // board still booting, try again
+        }
+        await new Promise((resolve) =>
+          setTimeout(resolve, SCAN_LIGHT_READ_RETRY_MS),
+        );
+      }
+    };
+    touchedRef.current = false;
+    void read();
     return () => {
       cancelled = true;
     };
@@ -131,6 +151,7 @@ export function ScanLightControl() {
   const restoreRef = useRef(SCAN_LIGHT_DEFAULT_PERCENT);
 
   const handleDrag = (value: number) => {
+    touchedRef.current = true;
     if (dragStartRef.current === null) dragStartRef.current = appliedRef.current;
     setPercent(value);
     if (scanLightTier(value) === "free") sendLive(value);
